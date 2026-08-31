@@ -1,4 +1,4 @@
-# Large generated artefacts (see data/README.md) — regenerate via src/01_build_index.py
+# Large generated artefacts (see data/README.md); regenerate via src/01_build_index.py
 data/wixqa_index.faiss
 data/chunk_embeddings.npy
 data/chunks.pkl
