@@ -1,0 +1,2 @@
+system,n_queries,P50_latency_s,P95_latency_s,P99_latency_s,mean_faithfulness,mean_answer_relevancy
+Static Top-5 baseline,400,14.84,24.95,35.41,,

@@ -1,0 +1,3 @@
+system,n_scored,faithfulness
+Static baseline (Top-5),40,0.7
+Adaptive (DeltaScore),40,0.7

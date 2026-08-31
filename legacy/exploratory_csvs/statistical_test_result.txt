@@ -1,0 +1,4 @@
+Wilcoxon signed-rank test on paired latencies
+n changed = 205, statistic = 886.0, p = 0.000000
+faster = 185, slower = 20, unchanged = 195
+baseline P95 = 24.0s, adaptive P95 = 22.27s

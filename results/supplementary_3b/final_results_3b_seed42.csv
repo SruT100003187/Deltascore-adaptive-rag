@@ -1,0 +1,5 @@
+seed,set,tau,p95,mean,faith,fast_n,p
+42,dev_baseline,,42.39,28.6,0.385,0,
+42,dev_chosen,0.0352,38.45,22.62,0.36,120,0.5424
+42,heldout_baseline,,45.9,30.34,0.33,0,
+42,heldout_adaptive,0.0352,41.99,24.08,0.285,116,0.136

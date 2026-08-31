@@ -1,0 +1,64 @@
+C:\Users\sruth\OneDrive - SRH\Thesis_relevant_papers_mostimp\Implementation_RAG>python -u rejudge_temp0.py
+==================================================================
+DETERMINISTIC RE-JUDGE  (temperature 0, fixed seed)
+==================================================================
+
+Judging baseline (Deep, K=5): 400 answers ...
+  25/400   faithful so far: 20   ~1130s left
+  50/400   faithful so far: 40   ~1060s left
+  75/400   faithful so far: 57   ~971s left
+  100/400   faithful so far: 74   ~979s left
+  125/400   faithful so far: 89   ~881s left
+  150/400   faithful so far: 105   ~973s left
+  175/400   faithful so far: 121   ~1239s left
+  200/400   faithful so far: 140   ~1356s left
+  225/400   faithful so far: 159   ~1466s left
+  250/400   faithful so far: 178   ~1530s left
+  275/400   faithful so far: 197   ~1437s left
+  300/400   faithful so far: 216   ~1163s left
+  325/400   faithful so far: 235   ~888s left
+  350/400   faithful so far: 254   ~600s left
+  375/400   faithful so far: 276   ~304s left
+  400/400   faithful so far: 289   ~0s left
+  wrote judge_baseline_t0.csv
+
+Judging Fast Path (K=3): 400 answers ...
+  25/400   faithful so far: 17   ~4022s left
+  50/400   faithful so far: 30   ~3644s left
+  75/400   faithful so far: 45   ~3346s left
+  100/400   faithful so far: 63   ~3097s left
+  125/400   faithful so far: 78   ~2798s left
+  150/400   faithful so far: 94   ~2547s left
+  175/400   faithful so far: 109   ~2298s left
+  200/400   faithful so far: 118   ~2036s left
+  225/400   faithful so far: 138   ~1766s left
+  250/400   faithful so far: 156   ~1457s left
+  275/400   faithful so far: 173   ~1149s left
+  300/400   faithful so far: 193   ~878s left
+  325/400   faithful so far: 206   ~6078s left
+  350/400   faithful so far: 225   ~3796s left
+  375/400   faithful so far: 241   ~2089s left
+  400/400   faithful so far: 260   ~0s left
+  wrote judge_fastK3_t0.csv
+
+Repeatability check: re-judging the first 50 baseline answers ...
+
+==================================================================
+SUMMARY
+==================================================================
+Baseline (Deep) faithfulness at temp 0 : 0.723  (n=400)
+Fast Path (K=3) faithfulness at temp 0 : 0.650  (n=400)
+Repeatability: 1 of 50 verdicts changed on a second run (noise floor = 0.020).
+
+NEXT: swap these steady verdicts in and rerun the final experiment across seeds:
+  copy judge_baseline.csv judge_baseline_noisy.csv
+  copy judge_fastK3.csv  judge_fastK3_noisy.csv
+  copy judge_baseline_t0.csv judge_baseline.csv
+  copy judge_fastK3_t0.csv  judge_fastK3.csv
+  (then rerun finalize_experiment_v2.py for SEED = 42, 7, 123, 2024)
+
+C:\Users\sruth\OneDrive - SRH\Thesis_relevant_papers_mostimp\Implementation_RAG>
+C:\Users\sruth\OneDrive - SRH\Thesis_relevant_papers_mostimp\Implementation_RAG>
+C:\Users\sruth\OneDrive - SRH\Thesis_relevant_papers_mostimp\Implementation_RAG>
+C:\Users\sruth\OneDrive - SRH\Thesis_relevant_papers_mostimp\Implementation_RAG>
+C:\Users\sruth\OneDrive - SRH\Thesis_relevant_papers_mostimp\Implementation_RAG>

@@ -1,0 +1,5 @@
+set,tau,p95,mean,faith,fast_n,p
+dev_baseline,,22.78,15.27,0.755,0,
+dev_chosen,0.0348,20.59,12.01,0.695,120,0.0807
+heldout_baseline,,25.52,15.34,0.695,0,
+heldout_adaptive,0.0348,22.38,12.11,0.675,120,0.6587

@@ -1,0 +1,164 @@
+Loaded 400 queries with complete records (K_FAST=3).
+
+Development set: 200 queries.   Held-out set: 200 queries.
+
+==================================================================
+STEP 1  -  THRESHOLD SELECTION ON THE DEVELOPMENT SET  (RQ3)
+==================================================================
+Baseline on dev:  P95=23.83s  faithfulness=0.77
+Selection rule:   robust threshold: no significant dev drop (p >= 0.05) and routed-Fast share closest to 60% (keeps a real Deep Path)
+Chosen threshold: tau = 0.0352   (the 40.0th percentile of dev DeltaScore)
+  on dev:  P95 23.83 -> 20.3 s,  faithfulness 0.77 -> 0.705,  fast 120/200,  p=0.0725
+
+==================================================================
+STEP 2  -  FINAL EVALUATION ON THE HELD-OUT SET  (RQ2)
+==================================================================
+Threshold frozen at tau = 0.0352. The held-out set was not used to choose it.
+  Static baseline:   P95 24.0 s   mean 15.87 s   faithfulness 0.68
+  Adaptive (K=3):    P95 22.18 s   mean 12.78 s   faithfulness 0.67
+  Change:            P95 -7.6%   mean -19.5%   faithfulness -0.010
+  Fast/Deep split:   116 fast / 84 deep
+  McNemar on faithfulness:  lost 21, gained 19, p = 0.8746  (no significant drop)
+  RQ2 verdict:  MET: meaningful P95 reduction with no statistically significant faithfulness drop
+
+==================================================================
+STEP 3  -  ROUTING RELIABILITY ON THE HELD-OUT SET  (RQ1)
+==================================================================
+Confusion matrix (rows = what the query actually needed, cols = where it was routed):
+                         routed Fast   routed Deep
+deep-needed                       21            14
+shallow-sufficient                74            59
+(excluded: 32 queries where neither path was judged supported)
+
+Protection recall: 40.0% of deep-needed queries were correctly routed Deep.
+Deep-needed rate among Fast-routed: 22.1%   among Deep-routed: 19.2%
+RQ1 verdict:  WEAK: the signal does not clearly separate deep-needed queries
+
+Saved final_results.csv and final_dev_sweep.csv.
+
+Report TAU_STAR, the held-out numbers, and the confusion matrix in your Results chapter.
+Note the caveats: the faithfulness judge is noisy (re-judge at temperature 0 to firm this up),
+and results are on a single split (you can repeat with several SEED values for robustness).
+Loaded 400 queries with complete records (K_FAST=3).
+
+Development set: 200 queries.   Held-out set: 200 queries.
+
+==================================================================
+STEP 1  -  THRESHOLD SELECTION ON THE DEVELOPMENT SET  (RQ3)
+==================================================================
+Baseline on dev:  P95=24.95s  faithfulness=0.735
+Selection rule:   robust threshold: no significant dev drop (p >= 0.05) and routed-Fast share closest to 60% (keeps a real Deep Path)
+Chosen threshold: tau = 0.0325   (the 40.0th percentile of dev DeltaScore)
+  on dev:  P95 24.95 -> 21.9 s,  faithfulness 0.735 -> 0.705,  fast 120/200,  p=0.4514
+
+==================================================================
+STEP 2  -  FINAL EVALUATION ON THE HELD-OUT SET  (RQ2)
+==================================================================
+Threshold frozen at tau = 0.0325. The held-out set was not used to choose it.
+  Static baseline:   P95 23.52 s   mean 15.17 s   faithfulness 0.715
+  Adaptive (K=3):    P95 20.59 s   mean 11.4 s   faithfulness 0.65
+  Change:            P95 -12.5%   mean -24.9%   faithfulness -0.065
+  Fast/Deep split:   138 fast / 62 deep
+  McNemar on faithfulness:  lost 30, gained 17, p = 0.0789  (no significant drop)
+  RQ2 verdict:  MET: meaningful P95 reduction with no statistically significant faithfulness drop
+
+==================================================================
+STEP 3  -  ROUTING RELIABILITY ON THE HELD-OUT SET  (RQ1)
+==================================================================
+Confusion matrix (rows = what the query actually needed, cols = where it was routed):
+                         routed Fast   routed Deep
+deep-needed                       30            15
+shallow-sufficient                85            38
+(excluded: 32 queries where neither path was judged supported)
+
+Protection recall: 33.3% of deep-needed queries were correctly routed Deep.
+Deep-needed rate among Fast-routed: 26.1%   among Deep-routed: 28.3%
+RQ1 verdict:  SUPPORTED: deep-needed queries concentrate in the Deep-routed group
+
+Saved final_results.csv and final_dev_sweep.csv.
+
+Report TAU_STAR, the held-out numbers, and the confusion matrix in your Results chapter.
+Note the caveats: the faithfulness judge is noisy (re-judge at temperature 0 to firm this up),
+and results are on a single split (you can repeat with several SEED values for robustness).
+Loaded 400 queries with complete records (K_FAST=3).
+
+Development set: 200 queries.   Held-out set: 200 queries.
+
+==================================================================
+STEP 1  -  THRESHOLD SELECTION ON THE DEVELOPMENT SET  (RQ3)
+==================================================================
+Baseline on dev:  P95=21.91s  faithfulness=0.725
+Selection rule:   robust threshold: no significant dev drop (p >= 0.05) and routed-Fast share closest to 60% (keeps a real Deep Path)
+Chosen threshold: tau = 0.0346   (the 40.0th percentile of dev DeltaScore)
+  on dev:  P95 21.91 -> 20.49 s,  faithfulness 0.725 -> 0.695,  fast 120/200,  p=0.4514
+
+==================================================================
+STEP 2  -  FINAL EVALUATION ON THE HELD-OUT SET  (RQ2)
+==================================================================
+Threshold frozen at tau = 0.0346. The held-out set was not used to choose it.
+  Static baseline:   P95 25.18 s   mean 15.57 s   faithfulness 0.725
+  Adaptive (K=3):    P95 22.24 s   mean 11.8 s   faithfulness 0.67
+  Change:            P95 -11.7%   mean -24.2%   faithfulness -0.055
+  Fast/Deep split:   124 fast / 76 deep
+  McNemar on faithfulness:  lost 27, gained 16, p = 0.1263  (no significant drop)
+  RQ2 verdict:  MET: meaningful P95 reduction with no statistically significant faithfulness drop
+
+==================================================================
+STEP 3  -  ROUTING RELIABILITY ON THE HELD-OUT SET  (RQ1)
+==================================================================
+Confusion matrix (rows = what the query actually needed, cols = where it was routed):
+                         routed Fast   routed Deep
+deep-needed                       27            19
+shallow-sufficient                81            47
+(excluded: 26 queries where neither path was judged supported)
+
+Protection recall: 41.3% of deep-needed queries were correctly routed Deep.
+Deep-needed rate among Fast-routed: 25.0%   among Deep-routed: 28.8%
+RQ1 verdict:  SUPPORTED: deep-needed queries concentrate in the Deep-routed group
+
+Saved final_results.csv and final_dev_sweep.csv.
+
+Report TAU_STAR, the held-out numbers, and the confusion matrix in your Results chapter.
+Note the caveats: the faithfulness judge is noisy (re-judge at temperature 0 to firm this up),
+and results are on a single split (you can repeat with several SEED values for robustness).
+Loaded 400 queries with complete records (K_FAST=3).
+
+Development set: 200 queries.   Held-out set: 200 queries.
+
+==================================================================
+STEP 1  -  THRESHOLD SELECTION ON THE DEVELOPMENT SET  (RQ3)
+==================================================================
+Baseline on dev:  P95=22.78s  faithfulness=0.755
+Selection rule:   robust threshold: no significant dev drop (p >= 0.05) and routed-Fast share closest to 60% (keeps a real Deep Path)
+Chosen threshold: tau = 0.0348   (the 40.0th percentile of dev DeltaScore)
+  on dev:  P95 22.78 -> 20.59 s,  faithfulness 0.755 -> 0.695,  fast 120/200,  p=0.0807
+
+==================================================================
+STEP 2  -  FINAL EVALUATION ON THE HELD-OUT SET  (RQ2)
+==================================================================
+Threshold frozen at tau = 0.0348. The held-out set was not used to choose it.
+  Static baseline:   P95 25.52 s   mean 15.34 s   faithfulness 0.695
+  Adaptive (K=3):    P95 22.38 s   mean 12.11 s   faithfulness 0.675
+  Change:            P95 -12.3%   mean -21.1%   faithfulness -0.020
+  Fast/Deep split:   120 fast / 80 deep
+  McNemar on faithfulness:  lost 25, gained 21, p = 0.6587  (no significant drop)
+  RQ2 verdict:  MET: meaningful P95 reduction with no statistically significant faithfulness drop
+
+==================================================================
+STEP 3  -  ROUTING RELIABILITY ON THE HELD-OUT SET  (RQ1)
+==================================================================
+Confusion matrix (rows = what the query actually needed, cols = where it was routed):
+                         routed Fast   routed Deep
+deep-needed                       25            17
+shallow-sufficient                77            53
+(excluded: 28 queries where neither path was judged supported)
+
+Protection recall: 40.5% of deep-needed queries were correctly routed Deep.
+Deep-needed rate among Fast-routed: 24.5%   among Deep-routed: 24.3%
+RQ1 verdict:  WEAK: the signal does not clearly separate deep-needed queries
+
+Saved final_results.csv and final_dev_sweep.csv.
+
+Report TAU_STAR, the held-out numbers, and the confusion matrix in your Results chapter.
+Note the caveats: the faithfulness judge is noisy (re-judge at temperature 0 to firm this up),
+and results are on a single split (you can repeat with several SEED values for robustness).

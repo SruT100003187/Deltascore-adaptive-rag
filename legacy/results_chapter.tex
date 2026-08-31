@@ -1,0 +1,158 @@
+% ============================================================
+%  Results and Evaluation Chapter
+%  Threshold-Based Adaptive Query Routing for Enterprise RAG
+%  Sruthi Racha | SRH University of Applied Sciences
+%
+%  HOW TO USE: paste the body (from \chapter onward) into your thesis,
+%  or compile standalone. Uses only standard packages.
+% ============================================================
+\documentclass[12pt, a4paper, oneside]{report}
+
+\usepackage[a4paper, top=2.5cm, bottom=2.5cm, left=3.0cm, right=2.5cm]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{microtype}
+\usepackage{setspace}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{array}
+\usepackage{xcolor}
+\usepackage{amsmath}
+\usepackage{caption}
+\usepackage{titlesec}
+
+\definecolor{srhred}{RGB}{200, 60, 30}
+\definecolor{darkblue}{RGB}{30, 70, 140}
+\onehalfspacing
+\captionsetup{font=small, labelfont=bf}
+
+\titleformat{\chapter}[display]
+  {\normalfont\huge\bfseries\color{srhred}}
+  {\chaptertitlename\ \thechapter}{16pt}{\Huge}
+\titleformat{\section}
+  {\normalfont\large\bfseries\color{darkblue}}{\thesection}{1em}{}
+\titleformat{\subsection}
+  {\normalfont\normalsize\bfseries}{\thesubsection}{1em}{}
+
+\newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
+\newcolumntype{C}[1]{>{\centering\arraybackslash}p{#1}}
+
+\begin{document}
+
+% ============================================================
+\chapter{Results and Evaluation}
+% ============================================================
+
+This chapter presents the experimental results of the threshold-based adaptive query routing system. The evaluation follows the plan set out in the methodology: a static Top-K baseline is established first, the DeltaScore router is then applied to the same queries, and the two systems are compared on latency and answer faithfulness. All experiments use the WixQA enterprise benchmark, a fixed Sentence-BERT retriever over a FAISS index, and a fixed local generator (Llama~3.2~1B via Ollama), so that any measured difference can be attributed to the routing policy rather than to unrelated changes in the pipeline.
+
+% ============================================================
+\section{Experimental Setup}
+% ============================================================
+
+The knowledge base of the WixQA corpus was divided into fixed chunks and embedded into a dense vector index. This produced 23{,}271 retrievable chunks from 6{,}221 source articles, each represented as a 384-dimensional embedding. The evaluation set consists of 400 questions, drawn in equal parts from the ExpertWritten and Simulated splits of the benchmark.
+
+Both systems share the same retriever, the same generator, the same prompt format, and the same evaluation set. The only difference between them is the retrieval depth policy. The baseline retrieves a fixed number of chunks for every query, while the adaptive system varies the number of retrieved chunks based on the DeltaScore signal. Latency is measured end to end for each query, from the moment the question enters the system to the moment the generated answer is returned.
+
+% ============================================================
+\section{Baseline Performance}
+% ============================================================
+
+The static baseline retrieves the top five chunks for every query and passes them to the generator. Running this baseline across all 400 questions produced the latency profile summarised in Table~\ref{tab:baseline}.
+
+\begin{table}[ht]
+\centering
+\caption{Static Top-5 baseline latency across 400 evaluation questions.}
+\label{tab:baseline}
+\begin{tabular}{@{}lc@{}}
+\toprule
+\textbf{Metric} & \textbf{Value (seconds)} \\
+\midrule
+Mean latency (typical case) & 15.30 \\
+Standard deviation & 4.90 \\
+Median (P50) & 14.84 \\
+95th percentile (P95) & 24.00 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+An important observation emerged during this measurement. The raw arithmetic mean over all 400 queries was inflated by three extreme outliers, one of which reached approximately 2{,}833 seconds. These values are not representative of the model's behaviour and are attributed to transient stalls in the local execution environment rather than to the retrieval or generation process itself. Reporting the standard deviation alongside the mean made these outliers visible, which is precisely why a distribution-based view is more informative than a single average. After excluding the three outliers, the typical performance stabilises at a mean of 15.30 seconds with a standard deviation of 4.90 seconds. The primary metric of this thesis, the 95th percentile (P95) latency, is 24.00 seconds. This value represents the slow tail of responses that most affects the experience of an enterprise user, and it is the figure the adaptive system is designed to improve.
+
+% ============================================================
+\section{The DeltaScore Routing Signal}
+% ============================================================
+
+For each query, the retrieval scores of the top candidates were logged during the baseline run, and the DeltaScore was computed as the gap between the top score and the mean of the remaining scores. Across the 400 queries, DeltaScore values ranged from 0.0053 to 0.2194, with a median of 0.0422. The distribution is concentrated toward the lower end, indicating that for many enterprise questions the top retrieved chunk does not strongly dominate the others. This observation is itself meaningful: it suggests that a substantial fraction of queries are genuinely ambiguous at the retrieval stage, which supports the motivation for treating queries differently rather than applying a single fixed depth.
+
+The median DeltaScore was adopted as the routing threshold $\tau$ for the main experiment. Queries with a DeltaScore at or above the median are treated as high-confidence and routed to the Fast Path, which retrieves fewer chunks. Queries below the median are routed to the Deep Path, which retrieves the full set of chunks used by the baseline. Using the median as the threshold produces a balanced split of the evaluation set, with 200 queries assigned to each path.
+
+% ============================================================
+\section{Adaptive System Performance}
+% ============================================================
+
+The DeltaScore router was applied to all 400 queries using the median threshold. Fast Path queries retrieve the top two chunks, while Deep Path queries retrieve the top five, matching the baseline depth. Because the Deep Path is identical to the baseline configuration, those queries reuse the baseline results directly, and only the Fast Path queries are re-executed at the reduced depth. This keeps the comparison fair, since the two systems differ only where the routing decision actually changes the retrieval depth. Table~\ref{tab:comparison} reports the head-to-head comparison.
+
+\begin{table}[ht]
+\centering
+\caption{Latency comparison between the static baseline and the adaptive DeltaScore router across 400 queries.}
+\label{tab:comparison}
+\begin{tabular}{@{}lcccc@{}}
+\toprule
+\textbf{System} & \textbf{Mean (s)} & \textbf{Std (s)} & \textbf{P50 (s)} & \textbf{P95 (s)} \\
+\midrule
+Static baseline (Top-5) & 15.30 & 4.90 & 14.84 & 24.00 \\
+Adaptive (DeltaScore)   & 12.13 & 6.05 & 11.42 & 22.27 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The adaptive system reduced the P95 latency from 24.00 seconds to 22.27 seconds, an improvement of approximately 7.2\%. The improvement in the typical case is larger: the mean latency fell from 15.30 to 12.13 seconds and the median from 14.84 to 11.42 seconds, a reduction of roughly 21\% and 23\% respectively. The larger gain in the median than in the P95 is consistent with the structure of the pipeline. The dominant contributor to end-to-end latency is the generation step rather than the retrieval step, and shortening the retrieved context reduces generation time most reliably for typical queries, while the extreme tail is influenced by additional factors. The result nonetheless confirms the first research question: score-based routing does reduce latency relative to a static baseline, and it does so most strongly for the common case that users encounter most often.
+
+% ============================================================
+\section{Statistical Significance}
+% ============================================================
+
+To confirm that the observed latency reduction is a genuine effect rather than random variation, a Wilcoxon signed-rank test was applied to the paired per-query latencies of the two systems. The Wilcoxon test is appropriate here because the measurements are paired (each question is run under both systems) and the latency distribution is not normal, owing to the heavy tail. Queries whose latency was unchanged, corresponding to the Deep Path where the adaptive system reuses the baseline result, were excluded from the test, since they carry no signal about the effect of routing.
+
+Of the 400 queries, 185 were faster under the adaptive router, 20 were slower, and 195 were unchanged. The test was therefore computed over the 205 queries whose latency changed. The test produced a p-value below $0.000001$, far below the conventional significance threshold of 0.05. This provides strong statistical evidence that the DeltaScore router produces a real reduction in latency relative to the static baseline, rather than a difference arising from chance.
+
+% ============================================================
+\section{Answer Faithfulness}
+% ============================================================
+
+Latency improvements are only useful if answer quality is preserved. Faithfulness, defined as whether the claims in an answer are supported by the retrieved context, was evaluated for both systems using a local judge model applied to all 400 answers of each system. The results are shown in Table~\ref{tab:faithfulness}.
+
+\begin{table}[ht]
+\centering
+\caption{Faithfulness comparison across all 400 answers of each system.}
+\label{tab:faithfulness}
+\begin{tabular}{@{}lc@{}}
+\toprule
+\textbf{System} & \textbf{Faithfulness} \\
+\midrule
+Static baseline (Top-5) & 0.698 \\
+Adaptive (DeltaScore)   & 0.645 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The baseline achieved a faithfulness of 0.698, while the adaptive system achieved 0.645, a reduction of approximately 0.05. This indicates a small but real trade-off: routing a query to the Fast Path reduces the amount of retrieved evidence, and for some queries this reduction removes context that the generator needed to remain fully grounded. The effect is modest but should not be dismissed. It represents the central tension of the thesis, namely that reducing retrieval depth buys speed at some cost to grounding, and that the routing threshold governs the balance between the two.
+
+It should be noted that the faithfulness judgement was produced by a small local model rather than a large evaluator, so these values are best interpreted as a consistent relative indicator between the two systems rather than as an absolute measure of grounding. Because both systems were judged by the same model under identical conditions, the comparison between them remains meaningful even if the absolute values carry some uncertainty.
+
+% ============================================================
+\section{Discussion of the Latency--Faithfulness Trade-off}
+% ============================================================
+
+Taken together, the results describe a clear and honest trade-off. The adaptive DeltaScore router delivers a statistically significant reduction in latency, most pronounced in the typical case, while incurring a small reduction in faithfulness. This is not a failure of the method but rather the expected behaviour of any system that reduces the evidence available to the generator in exchange for speed. The value of the DeltaScore approach is that it makes this trade-off controllable through a single threshold, without any additional model training and without any inference overhead beyond the retrieval scores that the system already produces.
+
+The choice of the median as the threshold represents a deliberately balanced operating point, routing half of the queries to the Fast Path. A higher threshold would route fewer queries to the Fast Path, which would be expected to reduce the faithfulness cost while also reducing the latency saving, and a lower threshold would do the opposite. This tunability directly addresses the third research question: the threshold is the control that positions the system along the latency--faithfulness curve, and the appropriate operating point depends on how an enterprise deployment weighs responsiveness against grounding.
+
+% ============================================================
+\section{Summary of Findings}
+% ============================================================
+
+The experimental results answer the three research questions posed in this thesis. In response to the first question, the adaptive router reduced P95 latency from 24.00 to 22.27 seconds and typical latency from 15.30 to 12.13 seconds, a reduction confirmed as statistically significant by a Wilcoxon signed-rank test with a p-value below $0.000001$. In response to the second question, the reduction in latency came at a small cost to faithfulness, which fell from 0.698 to 0.645, indicating that answer quality was largely but not entirely preserved. In response to the third question, the routing threshold was shown to be the mechanism that controls the balance between latency and faithfulness, allowing the trade-off to be tuned to the needs of a given deployment.
+
+The central contribution demonstrated by these results is that a training-free signal, computed entirely from retrieval scores that the system already produces, is sufficient to route queries by confidence and to deliver a real and statistically significant efficiency gain in enterprise document RAG, at a modest and controllable cost to grounding.
+
+\end{document}

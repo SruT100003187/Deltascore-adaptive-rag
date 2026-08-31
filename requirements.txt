@@ -1,0 +1,15 @@
+datasets
+sentence-transformers
+faiss-cpu
+pandas
+numpy
+scipy
+tqdm
+
+# Only needed for the superseded script in legacy/03_evaluate_baseline.py
+# (RAGAS + OpenAI-key-gated faithfulness metric) - not required for src/
+ragas
+ollama
+
+# Ollama itself is not a pip package - install separately: https://ollama.com
+# then: ollama pull llama3.2:1b

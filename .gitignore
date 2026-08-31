@@ -1,0 +1,30 @@
+# Large generated artefacts (see data/README.md) — regenerate via src/01_build_index.py
+data/wixqa_index.faiss
+data/chunk_embeddings.npy
+data/chunks.pkl
+*.faiss
+*.npy
+*.pkl
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+env/
+*.egg-info/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Secrets / local config
+.env
+*.key
+
+# Editor
+.vscode/
+.idea/
