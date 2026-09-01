@@ -5,6 +5,7 @@ pandas
 numpy
 scipy
 tqdm
+matplotlib
 
 # Only needed for the superseded script in legacy/03_evaluate_baseline.py
 # (RAGAS + OpenAI-key-gated faithfulness metric) - not required for src/
